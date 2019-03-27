@@ -1,5 +1,5 @@
 //================================================
-// YOUR NAME GOES HERE <-----------------  
+// Timothy White - Assignment 6 - Drawing
 //================================================
 #include <iostream>
 #include <fstream>
@@ -24,11 +24,18 @@ int main()
 	window.setFramerateLimit(60);
 
 	SettingsMgr settingsMgr(Color::Blue, ShapeEnum::CIRCLE);
-	SettingsUI  settingsUI(&settingsMgr); 
+	SettingsUI  settingsUI(&settingsMgr);
 	ShapeMgr    shapeMgr;
 	DrawingUI   drawingUI(Vector2f(200, 50));
 	
 	// ********* Add code here to make the managers read from shapes file (if the file exists)
+	fstream infile;
+	infile.open("shapes.bin", ios::in | ios::binary);
+	if (infile) {
+		settingsMgr.readFromFile(infile);
+		shapeMgr.readFromFile(infile);
+	}
+	infile.close();
 
 	while (window.isOpen()) 
 	{
@@ -39,6 +46,11 @@ int main()
 			{
 				window.close();
 				// ****** Add code here to write all data to shapes file
+				fstream outfile;
+				outfile.open("shapes.bin", ios::out | ios::binary);
+				settingsMgr.writeToFile(outfile);
+				shapeMgr.writeToFile(outfile);
+				outfile.close();
 			}
 			else if (event.type == Event::MouseButtonReleased)
 			{
